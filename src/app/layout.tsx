@@ -46,7 +46,7 @@ export default function RootLayout({
         <AuthProvider>
           <AuthGuard>
             <AdminShell>
-              <div className="max-w-full mx-auto w-full pl-72">{children}</div>
+              <div className="max-w-full mx-auto w-full lg:pl-72">{children}</div>
             </AdminShell>
           </AuthGuard>
           <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
