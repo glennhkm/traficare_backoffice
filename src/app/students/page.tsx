@@ -87,7 +87,6 @@ export default async function StudentsPage() {
                   <th className="py-4 px-6 text-left text-sm font-semibold text-slate-700">Nama</th>
                   <th className="py-4 px-6 text-left text-sm font-semibold text-slate-700">Detail</th>
                   <th className="py-4 px-6 text-left text-sm font-semibold text-slate-700">Sekolah</th>
-                  <th className="py-4 px-6 text-left text-sm font-semibold text-slate-700">Akses Panduan</th>
                   <th className="py-4 px-6 text-left text-sm font-semibold text-slate-700">Bergabung</th>
                 </tr>
               </thead>
@@ -110,12 +109,6 @@ export default async function StudentsPage() {
                       <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200">
                         {s.asal_sekolah}
                       </span>
-                    </td>
-                    <td className="py-4 px-6">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-lg font-semibold text-slate-800">{counts.get(s.nis) ?? 0}</span>
-                        <span className="text-sm text-slate-600">kali</span>
-                      </div>
                     </td>
                     <td className="py-4 px-6">
                       <span className="text-sm text-slate-600">
