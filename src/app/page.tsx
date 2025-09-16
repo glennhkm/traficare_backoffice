@@ -2,6 +2,9 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { getAnalyticsStats } from "@/lib/analytics";
 import DashboardClient from "@/components/DashboardClient";
 
+// Force dynamic rendering to ensure fresh data on each request (no static caching)
+export const dynamic = "force-dynamic";
+
 export default async function Dashboard() {
   // Get analytics stats (default 30 days)
   const analyticsStats = await getAnalyticsStats();
@@ -21,10 +24,10 @@ export default async function Dashboard() {
     .order("viewed_at", { ascending: false })
     .limit(10);
   const { data: recentVisits } = await supabaseAdmin
-      .from("analytics_page_views")
-      .select("path, timestamp, student_nis, user_agent, students:students(nama)")
-      .order("created_at", { ascending: false })
-      .limit(5);
+    .from("analytics_page_views")
+    .select("path, timestamp, student_nis, user_agent, students:students(nama)")
+    .order("created_at", { ascending: false })
+    .limit(5);
 
   return (
     <main className="p-6 lg:p-8 space-y-8">
