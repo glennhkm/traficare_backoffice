@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id">
-      <body className={`${inter.variable} font-sans antialiased bg-slate-50`}>
+      <body className={`${inter.variable} font-sans antialiased bg-slate-50 w-full overflow-x-hidden`}>
         {/* NextJS TopLoader for route transitions */}
         <NextTopLoader
           color="#2563eb"
@@ -46,7 +46,7 @@ export default function RootLayout({
         <AuthProvider>
           <AuthGuard>
             <AdminShell>
-              <div className="max-w-full mx-auto w-full lg:pl-72">{children}</div>
+              <div className="max-w-full mx-auto w-full overflow-x-hidden lg:pl-72">{children}</div>
             </AdminShell>
           </AuthGuard>
           <Toaster position="top-right" toastOptions={{ duration: 3000 }} />

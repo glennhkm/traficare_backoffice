@@ -21,7 +21,7 @@ async function getGuides() {
 export default async function GuidesPage() {
   const guides = await getGuides();
   return (
-    <main className="p-6 lg:p-8 space-y-8">
+    <main className="p-6 lg:p-8 space-y-8 overflow-x-hidden w-full">
       {/* Header */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
         <div className="flex items-center space-x-3 mb-2">

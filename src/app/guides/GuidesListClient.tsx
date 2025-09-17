@@ -44,7 +44,7 @@ export default function GuidesListClient({
   };
 
   return (
-    <div className="divide-y divide-slate-200">
+    <div className="divide-y divide-slate-200 w-full max-w-full overflow-x-hidden">
       <div className="p-4 flex items-center justify-between">
         <div className="text-sm text-slate-600">Kelola panduan P3K sekolah Anda</div>
         <button
@@ -64,7 +64,7 @@ export default function GuidesListClient({
         </div>
       ) : (
         guides.map((g) => (
-          <div key={g.id} className="flex items-start justify-between p-4">
+          <div key={g.id} className="flex items-start justify-between p-4 w-full">
             <div className="min-w-0 pr-4">
               <div className="flex items-center gap-2 mb-1">
                 <Badge category={g.category} />
@@ -72,9 +72,11 @@ export default function GuidesListClient({
                   {g.published ? "Dipublikasi" : "Draft"}
                 </span>
               </div>
-              <div className="font-medium text-slate-800 truncate">{g.title}</div>
+              <div className="font-medium text-slate-800 truncate max-w-full">{g.title}</div>
               {g.description && (
-                <div className="text-sm text-slate-600 truncate">{g.description}</div>
+                <div className="text-sm text-slate-600 whitespace-normal break-words break-all max-w-full overflow-hidden">
+                  {g.description}
+                </div>
               )}
               <div className="text-xs text-slate-500 mt-1">Dibuat: {new Date(g.created_at).toISOString().split("T")[0]}</div>
             </div>
