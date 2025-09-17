@@ -10,7 +10,7 @@ type Guide = {
   title: string;
   description?: string | null;
   youtube_url?: string | null;
-  article_html?: string | null;
+  pdf_url?: string | null;
   published: boolean;
   created_at: string;
 };
@@ -78,6 +78,18 @@ export default function GuidesListClient({
                   {g.description}
                 </div>
               )}
+              {g.pdf_url && (
+                <div className="mt-2">
+                  <a
+                    href={g.pdf_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm text-blue-700 hover:underline"
+                  >
+                    📄 Lihat PDF
+                  </a>
+                </div>
+              )}
               <div className="text-xs text-slate-500 mt-1">Dibuat: {new Date(g.created_at).toISOString().split("T")[0]}</div>
             </div>
             <div className="flex items-center gap-2 shrink-0">
@@ -85,13 +97,13 @@ export default function GuidesListClient({
                 className="px-3 py-1.5 rounded-lg border text-blue-700 border-blue-300 hover:bg-blue-50"
                 onClick={() => setOpenId(g.id)}
               >
-                Update
+                Edit
               </button>
               <button
                 className="px-3 py-1.5 rounded-lg border text-red-700 border-red-300 hover:bg-red-50"
                 onClick={() => onDelete(g.id)}
               >
-                Delete
+                Hapus
               </button>
             </div>
 
@@ -177,15 +189,9 @@ function CreateModal({ onClose, onSubmit }: { onClose: () => void; onSubmit: (fd
                   <option value="sinkop">Sinkop</option>
                 </select>
               </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">Judul</label>
-                <input name="title" required className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-              </div>
-
               <div className="space-y-2 lg:col-span-2">
                 <label className="text-sm font-medium text-slate-700">Deskripsi</label>
-                <input name="description" className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                <input name="description" required className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
               </div>
 
               <div className="space-y-2 lg:col-span-2">
@@ -194,8 +200,16 @@ function CreateModal({ onClose, onSubmit }: { onClose: () => void; onSubmit: (fd
               </div>
 
               <div className="space-y-2 lg:col-span-2">
-                <label className="text-sm font-medium text-slate-700">Artikel (HTML)</label>
-                <RichTextEditor name="article_html" placeholder="Tulis artikel panduan di sini..." />
+                <label className="text-sm font-medium text-slate-700">Link PDF (Google Drive)</label>
+                <input
+                  name="pdf_url"
+                  required
+                  inputMode="url"
+                  pattern="https://.*"
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="https://drive.google.com/file/d/FILE_ID/view?usp=sharing"
+                />
+                <p className="text-xs text-slate-500">Gunakan tautan aman dari Google Drive (file PDF). Contoh: https://drive.google.com/file/d/&lt;FILE_ID&gt;/view</p>
               </div>
 
               <div className="lg:col-span-2 pt-2 flex items-center justify-between">
@@ -241,7 +255,7 @@ function EditModal({ guide, onClose, onSubmit }: { guide: Guide; onClose: () => 
     <div className="fixed inset-0 z-50">
       <div className="absolute inset-0 bg-black/30" onClick={onClose} />
       <div className="absolute inset-0 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl border border-slate-200 h-[80%] flex flex-col">
+        <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl border border-slate-200 flex flex-col">
           <div className="p-4 border-b flex items-center justify-between shrink-0">
             <h3 className="font-semibold text-slate-800">Update Panduan</h3>
             <button onClick={onClose} className="text-slate-500 hover:text-slate-700">✕</button>
@@ -260,11 +274,6 @@ function EditModal({ guide, onClose, onSubmit }: { guide: Guide; onClose: () => 
                 </select>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">Judul</label>
-                <input name="title" defaultValue={guide.title} className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-              </div>
-
               <div className="space-y-2 lg:col-span-2">
                 <label className="text-sm font-medium text-slate-700">Deskripsi</label>
                 <input name="description" defaultValue={guide.description ?? ""} className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
@@ -276,8 +285,16 @@ function EditModal({ guide, onClose, onSubmit }: { guide: Guide; onClose: () => 
               </div>
 
               <div className="space-y-2 lg:col-span-2">
-                <label className="text-sm font-medium text-slate-700">Artikel (HTML)</label>
-                <RichTextEditor name="article_html" defaultValue={guide.article_html ?? ""} />
+                <label className="text-sm font-medium text-slate-700">Link PDF (Google Drive)</label>
+                <input
+                  name="pdf_url"
+                  inputMode="url"
+                  pattern="https://.*"
+                  defaultValue={guide.pdf_url ?? ""}
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="https://drive.google.com/file/d/FILE_ID/view?usp=sharing"
+                />
+                <p className="text-xs text-red-500">* Pastikan file berupa PDF dan disimpan di google drive.</p>
               </div>
 
               <div className="lg:col-span-2 pt-2 flex items-center justify-between">
@@ -297,194 +314,6 @@ function EditModal({ guide, onClose, onSubmit }: { guide: Guide; onClose: () => 
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-function RichTextEditor({ name, defaultValue = "", placeholder }: { name: string; defaultValue?: string; placeholder?: string }) {
-  const [html, setHtml] = useState<string>(defaultValue || "");
-  const hostRef = useRef<HTMLDivElement | null>(null);
-  const editorInstanceRef = useRef<any>(null);
-
-  // Load CKEditor 5 from CDN once
-  useEffect(() => {
-    let mounted = true;
-
-    const loadScript = () =>
-      new Promise<any>((resolve, reject) => {
-        if ((window as any).ClassicEditor) return resolve((window as any).ClassicEditor);
-        let script = document.getElementById("ckeditor5-cdn") as HTMLScriptElement | null;
-        if (!script) {
-          script = document.createElement("script");
-          script.id = "ckeditor5-cdn";
-          script.src = "https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js";
-          script.async = true;
-          script.onload = () => resolve((window as any).ClassicEditor);
-          script.onerror = reject;
-          document.body.appendChild(script);
-        } else {
-          script.onload = () => resolve((window as any).ClassicEditor);
-          script.onerror = reject;
-          // If it's already loaded, resolve immediately
-          if ((window as any).ClassicEditor) return resolve((window as any).ClassicEditor);
-        }
-      });
-
-    const init = async () => {
-      try {
-        const ClassicEditor = await loadScript();
-        if (!mounted || !hostRef.current) return;
-        const editor = await ClassicEditor.create(hostRef.current, {
-          placeholder: placeholder || "Tulis di sini...",
-          toolbar: [
-            "heading",
-            "|", 
-            "bold",
-            "italic",
-            "underline",
-            "strikethrough",
-            "|",
-            "bulletedList",
-            "numberedList",
-            "outdent",
-            "indent",
-            "|",
-            "link",
-            "blockQuote",
-            "insertTable",
-            "|",
-            "undo",
-            "redo",
-          ],
-          heading: {
-            options: [
-              { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-              { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-              { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-              { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' }
-            ]
-          },
-          // Apply styles to make editor content look like final output
-          htmlSupport: {
-            allow: [
-              {
-                name: /.*/,
-                attributes: true,
-                classes: true,
-                styles: true
-              }
-            ]
-          }
-        });
-        
-        editorInstanceRef.current = editor;
-        if (defaultValue) editor.setData(defaultValue);
-        
-        editor.model.document.on("change:data", () => {
-          const data = editor.getData();
-          setHtml(data);
-        });
-
-        // Add custom CSS to make editor content preview realistic
-        const editorElement = editor.ui.getEditableElement();
-        if (editorElement) {
-          editorElement.style.fontFamily = 'ui-sans-serif, system-ui, sans-serif';
-          editorElement.style.fontSize = '16px';
-          editorElement.style.lineHeight = '1.6';
-          editorElement.style.padding = '16px';
-          
-          // Add styles for headings and other elements
-          const style = document.createElement('style');
-          style.textContent = `
-            .ck-editor__editable h1 {
-              font-size: 2rem;
-              font-weight: 700;
-              margin: 1rem 0 0.5rem 0;
-              color: #1f2937;
-              line-height: 1.2;
-            }
-            .ck-editor__editable h2 {
-              font-size: 1.5rem;
-              font-weight: 600;
-              margin: 1rem 0 0.5rem 0;
-              color: #374151;
-              line-height: 1.3;
-            }
-            .ck-editor__editable h3 {
-              font-size: 1.25rem;
-              font-weight: 600;
-              margin: 0.75rem 0 0.5rem 0;
-              color: #4b5563;
-              line-height: 1.4;
-            }
-            .ck-editor__editable p {
-              margin: 0.5rem 0;
-              color: #374151;
-            }
-            .ck-editor__editable ul {
-              padding-left: 1.5rem;
-              margin: 0.5rem 0;
-              list-style-type: disc;
-              list-style-position: outside;
-            }
-            .ck-editor__editable ol {
-              padding-left: 1.5rem;
-              margin: 0.5rem 0;
-              list-style-type: decimal;
-              list-style-position: outside;
-            }
-            .ck-editor__editable ul ul {
-              list-style-type: circle;
-            }
-            .ck-editor__editable ul ul ul {
-              list-style-type: square;
-            }
-            .ck-editor__editable li {
-              margin: 0.25rem 0;
-              color: #374151;
-              display: list-item;
-            }
-            .ck-editor__editable blockquote {
-              border-left: 4px solid #d1d5db;
-              padding-left: 1rem;
-              margin: 1rem 0;
-              font-style: italic;
-              color: #6b7280;
-            }
-            .ck-editor__editable a {
-              color: #2563eb;
-              text-decoration: underline;
-            }
-            .ck-editor__editable strong {
-              font-weight: 700;
-            }
-            .ck-editor__editable em {
-              font-style: italic;
-            }
-          `;
-          document.head.appendChild(style);
-        }
-      } catch (e) {
-        console.error("CKEditor load/init failed", e);
-      }
-    };
-
-    init();
-    return () => {
-      mounted = false;
-      const ed = editorInstanceRef.current;
-      if (ed) {
-        ed.destroy().catch(() => {});
-        editorInstanceRef.current = null;
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return (
-    <div className="w-full">
-      <input type="hidden" name={name} value={html} />
-      <div ref={hostRef} className="min-h-[200px] border border-slate-300 rounded-lg overflow-hidden" />
     </div>
   );
 }

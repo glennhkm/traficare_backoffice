@@ -12,7 +12,7 @@ async function getGuides() {
   const { data } = await supabaseAdmin
     .from("guides")
     .select(
-      "id, category, title, description, youtube_url, youtube_embed_url, article_html, published, created_at"
+      "id, category, title, description, youtube_url, youtube_embed_url, pdf_url, published, created_at"
     )
     .order("created_at", { ascending: false });
   return data ?? [];
