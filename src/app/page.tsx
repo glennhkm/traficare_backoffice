@@ -32,9 +32,9 @@ export default async function Dashboard() {
   return (
     <main className="p-6 lg:p-8 space-y-8">
       {/* Header */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
-        <h1 className="text-3xl font-bold text-slate-800 mb-2">Dashboard</h1>
-        <p className="text-slate-600">
+      <div className="pb-2">
+        <h1 className="text-3xl font-semibold text-slate-900 mb-1 leading-tight font-sans">Dashboard</h1>
+        <p className="text-slate-500 text-sm">
           Statistik ringkas dan aktivitas terbaru platform TRAFICARE
         </p>
       </div>

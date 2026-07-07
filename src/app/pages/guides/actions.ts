@@ -40,44 +40,56 @@ export async function deleteGuideAction(formData: FormData) {
   await supabaseAdmin.from("guides").delete().eq("id", id);
 }
 
-function toEmbed(url?: string | null) {
-  if (!url) return null;
-  try {
-    const u = new URL(url);
-    if (u.hostname.includes("youtu.be"))
-      return `https://www.youtube.com/embed/${u.pathname.replace("/", "")}`;
-    if (u.hostname.includes("youtube.com"))
-      return `https://www.youtube.com/embed/${u.searchParams.get("v")}`;
-  } catch {}
-  return null;
+function toEmbed(urlList?: string | null) {
+  if (!urlList) return null;
+  return urlList
+    .split(",")
+    .map(url => {
+      const trimmed = url.trim();
+      if (!trimmed) return "";
+      try {
+        const u = new URL(trimmed);
+        if (u.hostname.includes("youtu.be"))
+          return `https://www.youtube.com/embed/${u.pathname.replace("/", "")}`;
+        if (u.hostname.includes("youtube.com"))
+          return `https://www.youtube.com/embed/${u.searchParams.get("v")}`;
+      } catch {}
+      return "";
+    })
+    .filter(Boolean)
+    .join(",");
 }
 
 // Normalize Google Drive links to a safe, shareable PDF link
-function normalizeDrivePdfUrl(url?: string | null) {
-  if (!url) return null;
-  try {
-    const u = new URL(url);
-    // Only allow https
-    if (u.protocol !== "https:") return null;
+function normalizeDrivePdfUrl(urlList?: string | null) {
+  if (!urlList) return null;
+  return urlList
+    .split(",")
+    .map(url => {
+      const trimmed = url.trim();
+      if (!trimmed) return "";
+      try {
+        const u = new URL(trimmed);
+        // Only allow https
+        if (u.protocol !== "https:") return "";
 
-    // Accept common Drive patterns and turn them into export=download/view links
-    if (u.hostname.includes("drive.google.com")) {
-      // Patterns:
-      // - /file/d/<id>/view
-      // - /uc?id=<id>&export=download
-      // - /open?id=<id>
-      const m = u.pathname.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-      const id = m?.[1] || u.searchParams.get("id");
-      if (id) {
-        // Use direct view link that works in browser
-        return `https://drive.google.com/file/d/${id}/view?usp=sharing`;
-      }
-    }
+        // Accept common Drive patterns and turn them into export=download/view links
+        if (u.hostname.includes("drive.google.com")) {
+          const m = u.pathname.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+          const id = m?.[1] || u.searchParams.get("id");
+          if (id) {
+            // Use direct view link that works in browser
+            return `https://drive.google.com/file/d/${id}/view?usp=sharing`;
+          }
+        }
 
-    // If it's already a direct https link to a PDF somewhere else, allow it
-    if (u.pathname.toLowerCase().endsWith(".pdf")) {
-      return u.toString();
-    }
-  } catch {}
-  return null;
+        // If it's already a direct https link to a PDF somewhere else, allow it
+        if (u.pathname.toLowerCase().endsWith(".pdf")) {
+          return u.toString();
+        }
+      } catch {}
+      return "";
+    })
+    .filter(Boolean)
+    .join(",");
 }

@@ -23,18 +23,12 @@ export default async function GuidesPage() {
   return (
     <main className="p-6 lg:p-8 space-y-8 overflow-x-hidden w-full">
       {/* Header */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
-        <div className="flex items-center space-x-3 mb-2">
-          <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-xl">
-            📚
-          </div>
-          <h1 className="text-3xl font-bold text-slate-800">
-            Kelola Panduan P3K
-          </h1>
-        </div>
-        <p className="text-slate-600">
-          Tambah, edit, dan kelola konten panduan Pertolongan Pertama Pada
-          Kecelakaan
+      <div className="pb-2">
+        <h1 className="text-3xl font-semibold text-slate-900 mb-1 leading-tight font-sans">
+          Kelola Panduan P3K
+        </h1>
+        <p className="text-slate-500 text-sm">
+          Tambah, edit, dan kelola konten panduan Pertolongan Pertama Pada Kecelakaan
         </p>
       </div>
 
