@@ -31,6 +31,7 @@ export default function AdminShell({
     try {
       await signOut();
       toast.success("Logout berhasil");
+      window.location.href = '/';
     } catch (error) {
       toast.error("Gagal logout");
     }
@@ -59,7 +60,7 @@ export default function AdminShell({
             />
           </svg>
         </button>
-        
+
         {/* Mobile Header Branding matched to login logo */}
         <div className="flex items-center gap-2">
           <span className="font-serif text-xl font-bold gradient-text-primary leading-none select-none">
@@ -115,19 +116,15 @@ export default function AdminShell({
       <div className="flex">
         {/* Sidebar */}
         <aside
-          className={`fixed inset-y-0 left-0 z-50 w-72 transform lg:transform-none transition-transform bg-white border-r border-slate-200 lg:block shadow-xl lg:shadow-none ${
-            open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-          }`}
+          className={`fixed inset-y-0 left-0 z-50 w-72 transform lg:transform-none transition-transform bg-white border-r border-slate-200 lg:block shadow-xl lg:shadow-none ${open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+            }`}
         >
           {/* Sidebar Header: matched to login branding */}
-          <div className="hidden lg:flex h-20 items-center justify-center px-6 border-b border-slate-200 bg-[#0066a5]">
+          <div className="hidden lg:flex h-20 items-center justify-center px-6 border-b border-slate-200 bg-white">
             <div className="flex items-center justify-center space-x-2.5">
-              <span className="font-serif text-2xl font-bold text-white leading-none select-none">
+              <span className="font-serif text-3xl font-bold gradient-text-primary leading-tight select-none">
                 Traficare
               </span>
-              <div className="px-2 py-0.5 bg-cyan-400/10 border border-cyan-400/30 text-cyan-200 text-[9px] font-black uppercase tracking-widest rounded-full select-none shadow-[0_0_12px_rgba(34,211,238,0.45)] shrink-0">
-                Admin Panel
-              </div>
             </div>
           </div>
 
@@ -140,21 +137,19 @@ export default function AdminShell({
                   key={item.href}
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className={`flex items-center space-x-3 px-4 py-3 rounded-3xl text-sm font-medium transition-all duration-200 group ${
-                    active
+                  className={`flex items-center space-x-3 px-4 py-3 rounded-3xl text-sm font-medium transition-all duration-200 group ${active
                       ? "bg-[#0066A5] text-white shadow-lg shadow-blue-600/20"
                       : "hover:bg-[#0066A5]/10 text-slate-700 hover:text-slate-900"
-                  }`}
+                    }`}
                 >
                   <div className="w-5 h-5 shrink-0 flex items-center justify-center">
-                    <img 
-                      src={item.icon} 
-                      alt={item.label} 
-                      className={`w-5 h-5 transition-all ${
-                        active 
-                          ? "brightness-0 invert" 
+                    <img
+                      src={item.icon}
+                      alt={item.label}
+                      className={`w-5 h-5 transition-all ${active
+                          ? "brightness-0 invert"
                           : "opacity-75 group-hover:opacity-100 group-hover:scale-105"
-                      }`} 
+                        }`}
                     />
                   </div>
                   <span>{item.label}</span>
@@ -176,7 +171,7 @@ export default function AdminShell({
                     {user?.email}
                   </div>
                   <div className="text-xs text-slate-500">Administrator</div>
-                </div>                
+                </div>
               </div>
             </div>
             <div className="w-full bg-white border border-slate-200 rounded-xl z-50">

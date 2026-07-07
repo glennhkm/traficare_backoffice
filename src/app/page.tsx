@@ -16,18 +16,27 @@ export default async function Dashboard() {
     .from("guides")
     .select("*", { count: "exact", head: true });
 
-  const { data: recentViews } = await supabaseAdmin
+  const { data: recentViews, error: viewsError } = await supabaseAdmin
     .from("guide_views")
     .select(
       "student_nis, guide_id, viewed_at, guides:guides!inner(title, category)"
     )
     .order("viewed_at", { ascending: false })
     .limit(10);
-  const { data: recentVisits } = await supabaseAdmin
+
+  if (viewsError) {
+    console.error("Dashboard query recentViews error:", viewsError);
+  }
+
+  const { data: recentVisits, error: visitsError } = await supabaseAdmin
     .from("analytics_page_views")
     .select("path, timestamp, student_nis, user_agent, students:students(nama)")
     .order("created_at", { ascending: false })
     .limit(5);
+
+  if (visitsError) {
+    console.error("Dashboard query recentVisits error:", visitsError);
+  }
 
   return (
     <main className="p-6 lg:p-8 space-y-8">

@@ -169,7 +169,7 @@ export default function DashboardClient({
           <>
             <ActivityCard 
               title="Halaman Populer"
-              icon="/icons/population.svg"
+              icon="/icons/circle-star.svg"
               data={stats.topPages?.slice(0, 8) || []}
               renderItem={(page, i) => (
                 <li key={i} className="flex items-center justify-between py-3 border-b border-slate-100 last:border-b-0">
@@ -183,14 +183,14 @@ export default function DashboardClient({
 
             <ActivityCard 
               title="Traffic Terbaru"
-              icon="/icons/traffic-cone.svg"
+              icon="/icons/globe-1.svg"
               data={recentVisits || []}
               renderItem={(activity, i) => (
                 <li key={i} className="flex items-center justify-between py-3 border-b border-slate-100 last:border-b-0">
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium text-slate-800 truncate">{activity.path}</div>
                     <div className="text-xs text-slate-500">
-                      {activity.student_nis ? `Student: ${activity.students.nama}` : "Anonymous"}
+                      {activity.student_nis ? `Student: ${activity.students?.nama || activity.student_nis}` : "Anonymous"}
                     </div>
                   </div>
                   <div className="text-xs text-slate-400">
@@ -337,9 +337,9 @@ function DeviceChart({ data }: { data: any[] }) {
         <Pie
           data={chartData}
           cx="50%"
-          cy="42%"
-          innerRadius={48}
-          outerRadius={70}
+          cy="50%"
+          innerRadius={56}
+          outerRadius={90}
           paddingAngle={4}
           dataKey="value"
         >

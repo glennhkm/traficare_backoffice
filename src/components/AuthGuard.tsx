@@ -6,21 +6,19 @@ import { LoadingSpinner } from '@/components/LoadingComponents'
 
 interface AuthGuardProps {
   children: React.ReactNode
+  isPreAuthenticated: boolean
 }
 
-export default function AuthGuard({ children }: AuthGuardProps) {
+export default function AuthGuard({ children, isPreAuthenticated }: AuthGuardProps) {
   const { user, loading } = useAuth()
 
-  // Show loading spinner while loading initial auth session to prevent flash of login screen on page refresh
+  // Show protected content immediately if pre-authenticated during loading,
+  // or show the LoginForm immediately to avoid any flashing loading screens.
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <div className="flex flex-col items-center justify-center space-y-4">
-          <LoadingSpinner size="lg" />
-          <p className="text-sm font-medium text-slate-500 animate-pulse select-none">Memuat Sesi...</p>
-        </div>
-      </div>
-    );
+    if (isPreAuthenticated) {
+      return <>{children}</>
+    }
+    return <LoginForm />
   }
 
   // Show login form if user is not authenticated

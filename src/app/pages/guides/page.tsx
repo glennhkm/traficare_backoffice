@@ -36,7 +36,7 @@ export default async function GuidesPage() {
       <section className="bg-white rounded-2xl shadow-sm border border-slate-200">
         <div className="p-6 border-b border-slate-200">
           <h2 className="text-xl font-semibold text-slate-800 flex items-center space-x-2">
-            <span>📋</span>
+            <img src="/icons/info-guide.svg" alt="info-guide" style={{ filter: "invert(26%) sepia(85%) saturate(2032%) hue-rotate(188deg) brightness(91%) contrast(101%)" }} className="w-6 h-6" />
             <span>Daftar Panduan ({guides.length})</span>
           </h2>
         </div>

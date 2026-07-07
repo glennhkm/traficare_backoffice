@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import { Search, X } from "lucide-react";
 
 type Student = {
   nis: string;
@@ -81,9 +82,9 @@ export default function StudentsListClient({ students, counts }: StudentsListCli
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
         {/* Search Input */}
         <div className="relative w-full md:max-w-md">
-          <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-            🔍
-          </span>
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+            <Search className="h-5 w-5 text-slate-400" />
+          </div>
           <input
             type="text"
             value={searchTerm}
@@ -96,7 +97,7 @@ export default function StudentsListClient({ students, counts }: StudentsListCli
               onClick={() => setSearchTerm("")}
               className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600"
             >
-              ✕
+              <X className="h-5 w-5" />
             </button>
           )}
         </div>

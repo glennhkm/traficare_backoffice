@@ -3,6 +3,7 @@
 import { useMemo, useState, FormEvent, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import {Eye, Edit2, Trash2, Plus} from "lucide-react";
 
 type Guide = {
   id: string;
@@ -114,7 +115,8 @@ export default function GuidesListClient({
               : "bg-[#0066A5] text-white hover:bg-[#0066A5]/95 shadow-md shadow-blue-600/10 hover:shadow-lg hover:shadow-blue-600/15"
             }`}
         >
-          <span>➕</span>
+          {/* <span>➕</span> */}
+          <Plus className="h-4 w-4" />
           <span>Tambah Panduan</span>
         </button>
       </div>
@@ -165,20 +167,21 @@ export default function GuidesListClient({
                     onClick={() => setPreviewGuide(g)}
                     className="flex-1 py-2.5 px-3 bg-orange-400 hover:bg-orange-500 text-white rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-1.5"
                   >
-                    <span>👁️</span> Pratinjau
+                    <Eye className="h-4 w-4" /> 
+                    Pratinjau
                   </button>
                   <button
                     onClick={() => setOpenId(g.id)}
                     className="flex-1 py-2.5 px-3 bg-[#0066A5]/80 hover:bg-[#0066A5] text-white rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-1.5"
                   >
-                    <span>✏️</span> Edit
+                    <Edit2 className="h-4 w-4" /> Edit
                   </button>
                   <button
                     onClick={() => onDelete(g.id)}
-                    className="py-2.5 px-3 border border-red-200 bg-red-500 hover:bg-red-600 text-red-600 rounded-xl text-sm font-medium transition-all flex items-center justify-center"
+                    className="py-2.5 px-3 bg-red-500 hover:bg-red-600 text-red-600 rounded-xl text-sm font-medium transition-all flex items-center justify-center"
                     title="Hapus Panduan"
                   >
-                    <span>🗑️</span>
+                    <Trash2 className="text-white h-4 w-4" />
                   </button>
                 </div>
               </div>
