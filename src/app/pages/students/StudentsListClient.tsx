@@ -125,7 +125,7 @@ export default function StudentsListClient({ students, counts }: StudentsListCli
       <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
         <div className="overflow-x-auto w-full">
           {paginatedStudents.length > 0 ? (
-            <table className="min-w-full divide-y divide-slate-200">
+            <table className="min-w-[800px] w-full divide-y divide-slate-200">
               <thead className="bg-slate-50">
                 <tr>
                   <th className="py-4 px-6 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">NIS</th>
@@ -144,7 +144,7 @@ export default function StudentsListClient({ students, counts }: StudentsListCli
                       <td className="py-4.5 px-6 whitespace-nowrap">
                         <span className="font-mono text-xs bg-slate-100/90 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200/50">{s.nis}</span>
                       </td>
-                      <td className="py-4.5 px-6 whitespace-nowrap">
+                      <td className="py-4.5 px-6">
                         <div className="font-semibold text-slate-900">{s.nama}</div>
                       </td>
                       <td className="py-4.5 px-6">
@@ -199,12 +199,12 @@ export default function StudentsListClient({ students, counts }: StudentsListCli
 
         {/* Pagination controls */}
         {totalPages > 1 && (
-          <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+          <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 flex flex-col md:flex-row items-center justify-between gap-3">
             <div className="text-xs font-semibold text-slate-500">
               Menampilkan <span className="text-slate-800">{(currentPage - 1) * itemsPerPage + 1}</span> - <span className="text-slate-800">{Math.min(currentPage * itemsPerPage, filteredAndSortedStudents.length)}</span> dari <span className="text-slate-800">{filteredAndSortedStudents.length}</span> siswa
             </div>
             
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 flex-wrap justify-center">
               <button
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
@@ -213,22 +213,37 @@ export default function StudentsListClient({ students, counts }: StudentsListCli
                 Sebelumnya
               </button>
               
-              {Array.from({ length: totalPages }).map((_, idx) => {
-                const pageNum = idx + 1;
-                return (
-                  <button
-                    key={pageNum}
-                    onClick={() => setCurrentPage(pageNum)}
-                    className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
-                      currentPage === pageNum
-                        ? "bg-[#0066A5] text-white"
-                        : "border border-slate-200 text-slate-700 bg-white hover:bg-slate-50"
-                    }`}
-                  >
-                    {pageNum}
-                  </button>
+              {(() => {
+                const pages: (number | "ellipsis")[] = [];
+                if (totalPages <= 5) {
+                  for (let i = 1; i <= totalPages; i++) pages.push(i);
+                } else if (currentPage <= 3) {
+                  pages.push(1, 2, 3, "ellipsis", totalPages);
+                } else if (currentPage >= totalPages - 2) {
+                  pages.push(1, "ellipsis", totalPages - 2, totalPages - 1, totalPages);
+                } else {
+                  pages.push(1, "ellipsis", currentPage - 1, currentPage, currentPage + 1, "ellipsis", totalPages);
+                }
+                return pages.map((page, idx) =>
+                  page === "ellipsis" ? (
+                    <span key={`ellipsis-${idx}`} className="w-8 h-8 flex items-center justify-center text-xs font-bold text-slate-400 select-none">
+                      ···
+                    </span>
+                  ) : (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
+                        currentPage === page
+                          ? "bg-[#0066A5] text-white"
+                          : "border border-slate-200 text-slate-700 bg-white hover:bg-slate-50"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  )
                 );
-              })}
+              })()}
 
               <button
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
