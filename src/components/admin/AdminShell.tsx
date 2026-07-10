@@ -122,9 +122,7 @@ export default function AdminShell({
           {/* Sidebar Header: matched to login branding */}
           <div className="hidden lg:flex h-20 items-center justify-center px-6 border-b border-slate-200 bg-white">
             <div className="flex items-center justify-center space-x-2.5">
-              <span className="font-serif text-3xl font-bold gradient-text-primary leading-tight select-none">
-                Traficare
-              </span>
+              <img src="/images/logo-traficare.png" alt="logo-trafficare" className="w-40 h-40 object-contain" />
             </div>
           </div>
 

@@ -159,12 +159,12 @@ export default function StudentsListClient({ students, counts }: StudentsListCli
                         </span>
                       </td>
                       <td className="py-4.5 px-6 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold border ${
+                        <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold border ${
                           viewCount > 0 
                             ? "bg-emerald-50 text-emerald-700 border-emerald-100" 
                             : "bg-slate-50 text-slate-400 border-slate-200"
                         }`}>
-                          👁️ {viewCount} Akses
+                          {viewCount} Akses
                         </span>
                       </td>
                       <td className="py-4.5 px-6 whitespace-nowrap">

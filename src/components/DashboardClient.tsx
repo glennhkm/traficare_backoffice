@@ -329,7 +329,7 @@ function DeviceChart({ data }: { data: any[] }) {
     value: item.count
   }));
 
-  const COLORS = ['#0066A5', '#2563eb', '#60a5fa', '#93c5fd'];
+  const COLORS = ['#0066A5', '#ff8c00', '#60a5fa', '#93c5fd'];
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -344,7 +344,7 @@ function DeviceChart({ data }: { data: any[] }) {
           dataKey="value"
         >
           {chartData.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} /> 
           ))}
         </Pie>
         <Tooltip
@@ -368,8 +368,6 @@ function DeviceChart({ data }: { data: any[] }) {
     </ResponsiveContainer>
   );
 }
-
-
 
 function ActivityCard({ title, icon, data, renderItem }: {
   title: string;

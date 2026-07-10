@@ -50,10 +50,8 @@ export default function LoginForm() {
         {/* Left Side: Brand Text & Float Illustration */}
         {/* ponytail: keep elements minimal to align with requested layout references */}
         <div className="w-full md:w-1/2 flex flex-col justify-center items-center space-y-6">
-          <div className="space-y-4">
-            <h1 className="font-serif text-6xl md:text-[5.4rem] font-bold gradient-text-primary leading-tight hero-title select-none">
-              Traficare
-            </h1>
+          <div className="space-y-4 -mb-16">
+            <img src="/images/logo-traficare.png" alt="logo-trafficare" className="w-full h-64 object-contain" />
           </div>
 
           <div className="relative w-full h-[400px] scale-in">
