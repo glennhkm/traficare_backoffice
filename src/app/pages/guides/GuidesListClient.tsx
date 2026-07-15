@@ -142,7 +142,7 @@ export default function GuidesListClient({
                   <div className="flex items-center justify-between mb-4">
                     <Badge category={g.category} />
                     <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-medium border ${g.published ? "bg-green-50 text-green-700 border-green-200/60" : "bg-slate-50 text-slate-500 border-slate-200"}`}>
-                      {g.published ? "🟢 Dipublikasi" : "⚪ Draft"}
+                      {g.published ? "Dipublikasi" : "Draft"}
                     </span>
                   </div>
                   <h3 className="text-xl font-medium text-slate-900 mb-2 leading-snug">{g.title}</h3>
@@ -152,11 +152,9 @@ export default function GuidesListClient({
 
                   <div className="space-y-2 border-t border-slate-100 pt-4 mb-6">
                     <div className="flex items-center text-sm font-semibold text-slate-600">
-                      <span className="mr-2 text-base">📹</span>
                       <span className="text-slate-800 font-medium">{videoCount}</span>&nbsp;Video Panduan
                     </div>
                     <div className="flex items-center text-sm font-semibold text-slate-600">
-                      <span className="mr-2 text-base">📄</span>
                       <span className="text-slate-800 font-medium">{pdfCount}</span>&nbsp;Dokumen PDF / Google Drive
                     </div>
                   </div>
@@ -222,9 +220,9 @@ export default function GuidesListClient({
 
 function Badge({ category }: { category: string }) {
   const map: Record<string, string> = {
-    evakuasi: "bg-rose-50 text-rose-700 border-rose-200/60",
-    luka: "bg-amber-50 text-amber-700 border-amber-200/60",
-    fraktur: "bg-purple-50 text-purple-700 border-purple-200/60",
+    evakuasi: "bg-sky-50 text-sky-700 border-sky-200/60",
+    luka: "bg-sky-50 text-sky-700 border-sky-200/60",
+    fraktur: "bg-sky-50 text-sky-700 border-sky-200/60",
     sinkop: "bg-sky-50 text-sky-700 border-sky-200/60",
   };
   const label: Record<string, string> = {
@@ -287,7 +285,7 @@ function PreviewModal({ guide, onClose }: { guide: Guide; onClose: () => void })
                   : "border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50"
                 }`}
             >
-              <span>📹</span> Video Panduan ({videos.length})
+              Video Panduan ({videos.length})
             </button>
             <button
               onClick={() => setActiveTab("pdf")}
@@ -296,7 +294,7 @@ function PreviewModal({ guide, onClose }: { guide: Guide; onClose: () => void })
                   : "border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50"
                 }`}
             >
-              <span>📄</span> Dokumen PDF ({pdfs.length})
+              Dokumen PDF ({pdfs.length})
             </button>
           </div>
 
