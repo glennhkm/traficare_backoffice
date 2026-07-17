@@ -10,7 +10,7 @@ export async function createGuideAction(formData: FormData) {
   const pdf_url = normalizeDrivePdfUrl(pdf_url_raw); // reuse column pdf_url to store the PDF link
   const published = formData.get("published") === "on";
   const youtube_embed_url = toEmbed(youtube_url);
-  await supabaseAdmin.from("guides").insert({
+  const { data, error } = await supabaseAdmin.from("guides").insert({
     category,
     title,
     description,
@@ -18,7 +18,29 @@ export async function createGuideAction(formData: FormData) {
     youtube_embed_url,
     pdf_url,
     published,
-  });
+  }).select("id").single();
+
+  if (error) {
+    throw error;
+  }
+
+  const guideId = data?.id;
+  if (guideId && published && pdf_url) {
+    try {
+      const baseUrl = process.env.TRAFICARE_CHATBOT_URL?.replace(/\/$/, "");
+      if (baseUrl) {
+        await fetch(`${baseUrl}/api/admin/guides/${guideId}/import`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ force: true }),
+        });
+      }
+    } catch (e) {
+      console.error("Failed to trigger chatbot import for new guide:", e);
+    }
+  }
 }
 
 export async function updateGuideAction(formData: FormData) {
@@ -32,7 +54,28 @@ export async function updateGuideAction(formData: FormData) {
     published: formData.get("published") === "on",
   };
   payload.youtube_embed_url = toEmbed(payload.youtube_url);
-  await supabaseAdmin.from("guides").update(payload).eq("id", id);
+  const { error } = await supabaseAdmin.from("guides").update(payload).eq("id", id);
+
+  if (error) {
+    throw error;
+  }
+
+  if (payload.published && payload.pdf_url) {
+    try {
+      const baseUrl = process.env.TRAFICARE_CHATBOT_URL?.replace(/\/$/, "");
+      if (baseUrl) {
+        await fetch(`${baseUrl}/api/admin/guides/${id}/import`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ force: true }),
+        });
+      }
+    } catch (e) {
+      console.error("Failed to trigger chatbot import for updated guide:", e);
+    }
+  }
 }
 
 export async function deleteGuideAction(formData: FormData) {

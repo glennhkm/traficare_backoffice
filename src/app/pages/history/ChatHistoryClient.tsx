@@ -383,7 +383,7 @@ export default function ChatHistoryClient({
                       <tr
                         key={room.id}
                         className="hover:bg-slate-50/80 transition-colors group"
-                      >
+                      >   
                         {/* Row num */}
                         {/* <td className="py-4 px-5">
                           <span className="text-xs font-medium text-slate-400">{rowNum}</span>
