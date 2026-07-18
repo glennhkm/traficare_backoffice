@@ -1,31 +1,28 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import AdminShell from "@/components/admin/AdminShell";
 import { AuthProvider } from "@/contexts/AuthContext";
 import AuthGuard from "@/components/AuthGuard";
 import NextTopLoader from 'nextjs-toploader';
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
-  title: "TRAFICARE Admin",
+  title: "Traficare Admin",
   description: "Manajemen konten, siswa, dan trafik untuk platform edukasi P3K",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const isLoggedCookie = cookieStore.get("traficare_logged_in")?.value === "true";
+
   return (
     <html lang="id">
-      <body className={`${inter.variable} font-sans antialiased bg-slate-50 w-full overflow-x-hidden`}>
+      <body className="font-sans antialiased bg-slate-50 w-full overflow-x-hidden">
         {/* NextJS TopLoader for route transitions */}
         <NextTopLoader
           color="#2563eb"
@@ -42,11 +39,11 @@ export default function RootLayout({
           zIndex={1600}
           showAtBottom={false}
         />
-        
+
         <AuthProvider>
-          <AuthGuard>
+          <AuthGuard isPreAuthenticated={isLoggedCookie}>
             <AdminShell>
-              <div className="max-w-full mx-auto w-full overflow-x-hidden lg:pl-72">{children}</div>
+              <div className="max-w-full mx-auto w-full overflow-x-hidden">{children}</div>
             </AdminShell>
           </AuthGuard>
           <Toaster position="top-right" toastOptions={{ duration: 3000 }} />

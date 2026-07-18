@@ -50,8 +50,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             created_at: session.user.created_at,
             last_sign_in_at: session.user.last_sign_in_at || null,
           })
+          localStorage.setItem("traficare_logged_in", "true")
+          document.cookie = "traficare_logged_in=true; path=/; max-age=31536000; SameSite=Lax"
         } else {
           setUser(null)
+          localStorage.removeItem("traficare_logged_in")
+          document.cookie = "traficare_logged_in=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
         }
         setLoading(false)
         setError(null)
@@ -62,7 +66,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const signIn = async (email: string, password: string) => {
-    setLoading(true)
     setError(null)
     
     try {
@@ -81,26 +84,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const errorMessage = 'Login failed'
       setError(errorMessage)
       return { error: { message: errorMessage } }
-    } finally {
-      setLoading(false)
     }
   }
 
   const signOut = async () => {
-    setLoading(true)
     try {
       await supabaseAuth.auth.signOut()
       setUser(null)
+      localStorage.removeItem("traficare_logged_in")
+      document.cookie = "traficare_logged_in=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
     } catch (err) {
       console.error('Sign out error:', err)
       setError('Failed to sign out')
-    } finally {
-      setLoading(false)
     }
   }
 
   const updatePassword = async (currentPassword: string, newPassword: string) => {
-    setLoading(true)
     setError(null)
 
     try {
@@ -134,8 +133,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const errorMessage = 'Failed to update password'
       setError(errorMessage)
       return { error: { message: errorMessage } }
-    } finally {
-      setLoading(false)
     }
   }
 
