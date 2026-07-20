@@ -3,21 +3,21 @@
 import { useState, useEffect } from "react";
 import StatCard from "@/components/admin/StatCard";
 import { AnalyticsStats } from "@/lib/analytics";
-import { 
-  ChartSkeleton, 
-  DeviceStatsSkeleton, 
+import {
+  ChartSkeleton,
+  DeviceStatsSkeleton,
   ActivityCardSkeleton,
   ButtonSkeleton,
   LoadingSpinner
 } from "@/components/LoadingComponents";
-import { 
-  ResponsiveContainer, 
-  AreaChart, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   Cell,
   PieChart,
   Pie,
@@ -32,12 +32,12 @@ interface DashboardClientProps {
   recentVisits: any[];
 }
 
-export default function DashboardClient({ 
-  initialStats, 
-  studentsCount, 
-  guidesCount, 
+export default function DashboardClient({
+  initialStats,
+  studentsCount,
+  guidesCount,
   recentViews,
-  recentVisits 
+  recentVisits
 }: DashboardClientProps) {
   const [stats, setStats] = useState<AnalyticsStats>(initialStats);
   const [timespan, setTimespan] = useState("30");
@@ -66,27 +66,27 @@ export default function DashboardClient({
     <>
       {/* Stats Cards */}
       <section className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard 
-          label="Total Siswa" 
-          value={studentsCount} 
+        <StatCard
+          label="Total Siswa"
+          value={studentsCount}
           icon="/icons/member-list.svg"
           bgOpacity={10}
         />
-        <StatCard 
-          label="Panduan P3K" 
-          value={guidesCount} 
+        <StatCard
+          label="Panduan P3K"
+          value={guidesCount}
           icon="/icons/info-guide.svg"
           bgOpacity={10}
         />
-        <StatCard 
-          label="Page Views" 
-          value={stats.totalPageViews} 
+        <StatCard
+          label="Page Views"
+          value={stats.totalPageViews}
           icon="/icons/overview.svg"
           bgOpacity={10}
         />
-        <StatCard 
-          label="Unique Visitors" 
-          value={stats.uniqueVisitors} 
+        <StatCard
+          label="Unique Visitors"
+          value={stats.uniqueVisitors}
           icon="/icons/visit.svg"
           bgOpacity={10}
         />
@@ -101,7 +101,7 @@ export default function DashboardClient({
           <div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-semibold text-slate-800">Traffic Trends</h2>
-              
+
               {/* Timespan Selector */}
               <div className="flex items-center space-x-3">
                 <select
@@ -117,14 +117,18 @@ export default function DashboardClient({
                 </select>
               </div>
             </div>
-            
+
             <div className="h-80">
               {stats.dailyStats && stats.dailyStats.length > 0 ? (
                 <TrafficChart data={stats.dailyStats} timespan={parseInt(timespan)} />
               ) : (
                 <div className="h-full flex items-center justify-center text-slate-500">
                   <div className="text-center">
-                    <div className="text-4xl mb-2">📊</div>
+                    <img
+                      src="/icons/dashboard-monitor.svg"
+                      alt=""
+                      className="w-8 h-8 mx-auto"
+                      style={{ filter: "invert(26%) sepia(85%) saturate(2032%) hue-rotate(188deg) brightness(91%) contrast(101%)" }} />
                     <div className="text-sm">Belum ada data traffic</div>
                     <div className="text-xs text-slate-400 mt-1">
                       Mulai kunjungi website frontpage untuk melihat analytics
@@ -148,7 +152,11 @@ export default function DashboardClient({
               ) : (
                 <div className="h-full flex items-center justify-center text-slate-500">
                   <div className="text-center py-8">
-                    <div className="text-2xl mb-2">📱</div>
+                    <img
+                      src="/icons/dashboard-monitor.svg"
+                      alt=""
+                      className="w-8 h-8 mx-auto"
+                      style={{ filter: "invert(26%) sepia(85%) saturate(2032%) hue-rotate(188deg) brightness(91%) contrast(101%)" }} />
                     <div className="text-sm">Belum ada data device</div>
                   </div>
                 </div>
@@ -159,7 +167,7 @@ export default function DashboardClient({
       </section>
 
       {/* Activity Section */}
-      <section className="grid lg:grid-cols-2 gap-6">                
+      <section className="grid lg:grid-cols-2 gap-6">
         {loading ? (
           <>
             <ActivityCardSkeleton title="Halaman Populer" />
@@ -167,7 +175,7 @@ export default function DashboardClient({
           </>
         ) : (
           <>
-            <ActivityCard 
+            <ActivityCard
               title="Halaman Populer"
               icon="/icons/circle-star.svg"
               data={stats.topPages?.slice(0, 8) || []}
@@ -181,7 +189,7 @@ export default function DashboardClient({
               )}
             />
 
-            <ActivityCard 
+            <ActivityCard
               title="Traffic Terbaru"
               icon="/icons/globe-1.svg"
               data={recentVisits || []}
@@ -220,7 +228,11 @@ function TrafficChart({ data, timespan }: { data: any[], timespan: number }) {
     return (
       <div className="h-full flex items-center justify-center text-slate-500">
         <div className="text-center">
-          <div className="text-4xl mb-2">📈</div>
+          <img
+            src="/icons/dashboard-monitor.svg"
+            alt=""
+            className="w-8 h-8 mx-auto"
+            style={{ filter: "invert(26%) sepia(85%) saturate(2032%) hue-rotate(188deg) brightness(91%) contrast(101%)" }} />
           <div className="text-sm">Tidak ada data untuk periode ini</div>
         </div>
       </div>
@@ -230,9 +242,9 @@ function TrafficChart({ data, timespan }: { data: any[], timespan: number }) {
   // Show appropriate number of days based on timespan
   const displayData = data.slice(-Math.min(timespan, 90)).map(item => ({
     ...item,
-    formattedDate: new Date(item.date).toLocaleDateString('id-ID', { 
-      month: 'short', 
-      day: 'numeric' 
+    formattedDate: new Date(item.date).toLocaleDateString('id-ID', {
+      month: 'short',
+      day: 'numeric'
     })
   }));
 
@@ -241,30 +253,30 @@ function TrafficChart({ data, timespan }: { data: any[], timespan: number }) {
       <AreaChart data={displayData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
         <defs>
           <linearGradient id="viewsGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#0066A5" stopOpacity={0.2}/>
-            <stop offset="95%" stopColor="#0066A5" stopOpacity={0}/>
+            <stop offset="5%" stopColor="#0066A5" stopOpacity={0.2} />
+            <stop offset="95%" stopColor="#0066A5" stopOpacity={0} />
           </linearGradient>
           <linearGradient id="visitorsGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#ff8c00" stopOpacity={0.2}/>
-            <stop offset="95%" stopColor="#ff8c00" stopOpacity={0}/>
+            <stop offset="5%" stopColor="#ff8c00" stopOpacity={0.2} />
+            <stop offset="95%" stopColor="#ff8c00" stopOpacity={0} />
           </linearGradient>
         </defs>
         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-        <XAxis 
-          dataKey="formattedDate" 
-          tickLine={false} 
-          axisLine={false} 
+        <XAxis
+          dataKey="formattedDate"
+          tickLine={false}
+          axisLine={false}
           tick={{ fill: '#64748b', fontSize: 11 }}
         />
-        <YAxis 
-          tickLine={false} 
-          axisLine={false} 
-          tick={{ fill: '#64748b', fontSize: 11 }} 
+        <YAxis
+          tickLine={false}
+          axisLine={false}
+          tick={{ fill: '#64748b', fontSize: 11 }}
         />
-        <Tooltip 
-          contentStyle={{ 
-            backgroundColor: '#1e293b', 
-            borderRadius: '12px', 
+        <Tooltip
+          contentStyle={{
+            backgroundColor: '#1e293b',
+            borderRadius: '12px',
             border: 'none',
             color: '#fff',
             fontSize: '12px',
@@ -273,30 +285,30 @@ function TrafficChart({ data, timespan }: { data: any[], timespan: number }) {
           itemStyle={{ color: '#fff' }}
           labelStyle={{ color: '#94a3b8', fontWeight: 'bold' }}
         />
-        <Legend 
-          verticalAlign="top" 
-          height={40} 
+        <Legend
+          verticalAlign="top"
+          height={40}
           iconType="circle"
           iconSize={12}
           wrapperStyle={{ fontSize: '16px', color: '#1e293b', fontWeight: '600', paddingBottom: '15px' }}
         />
-        <Area 
-          type="monotone" 
+        <Area
+          type="monotone"
           name="Page Views"
-          dataKey="views" 
-          stroke="#0066A5" 
+          dataKey="views"
+          stroke="#0066A5"
           strokeWidth={2.5}
-          fillOpacity={1} 
-          fill="url(#viewsGradient)" 
+          fillOpacity={1}
+          fill="url(#viewsGradient)"
         />
-        <Area 
-          type="monotone" 
+        <Area
+          type="monotone"
           name="Unique Visitors"
-          dataKey="visitors" 
-          stroke="#ff8c00" 
+          dataKey="visitors"
+          stroke="#ff8c00"
           strokeWidth={2.5}
-          fillOpacity={1} 
-          fill="url(#visitorsGradient)" 
+          fillOpacity={1}
+          fill="url(#visitorsGradient)"
         />
       </AreaChart>
     </ResponsiveContainer>
@@ -317,7 +329,11 @@ function DeviceChart({ data }: { data: any[] }) {
     return (
       <div className="h-full flex items-center justify-center text-slate-500">
         <div className="text-center py-8">
-          <div className="text-2xl mb-2">📱</div>
+          <img
+            src="/icons/dashboard-monitor.svg"
+            alt=""
+            className="w-8 h-8 mx-auto"
+            style={{ filter: "invert(26%) sepia(85%) saturate(2032%) hue-rotate(188deg) brightness(91%) contrast(101%)" }} />
           <div className="text-sm">Belum ada data device</div>
         </div>
       </div>
@@ -344,22 +360,22 @@ function DeviceChart({ data }: { data: any[] }) {
           dataKey="value"
         >
           {chartData.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} /> 
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
         <Tooltip
-          contentStyle={{ 
-            backgroundColor: '#1e293b', 
-            borderRadius: '10px', 
+          contentStyle={{
+            backgroundColor: '#1e293b',
+            borderRadius: '10px',
             border: 'none',
             color: '#fff',
             fontSize: '12px',
             boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)'
           }}
         />
-        <Legend 
-          verticalAlign="bottom" 
-          height={40} 
+        <Legend
+          verticalAlign="bottom"
+          height={40}
           iconType="circle"
           iconSize={10}
           wrapperStyle={{ fontSize: '18px', color: '#1e293b', fontWeight: '600', paddingTop: '10px' }}
@@ -380,10 +396,10 @@ function ActivityCard({ title, icon, data, renderItem }: {
       <div className="flex items-center space-x-3 mb-6">
         <div className="w-10 h-10 bg-[#0066A5]/10 rounded-xl flex items-center justify-center p-2.5">
           {icon.startsWith('/') ? (
-            <img 
-              src={icon} 
-              alt="" 
-              className="w-5 h-5" 
+            <img
+              src={icon}
+              alt=""
+              className="w-5 h-5"
               style={{ filter: "invert(26%) sepia(85%) saturate(2032%) hue-rotate(188deg) brightness(91%) contrast(101%)" }}
             />
           ) : (
@@ -392,14 +408,18 @@ function ActivityCard({ title, icon, data, renderItem }: {
         </div>
         <h2 className="text-lg font-semibold text-slate-800">{title}</h2>
       </div>
-      
+
       {data && data.length > 0 ? (
         <ul className="space-y-0">
           {data.map(renderItem)}
         </ul>
       ) : (
         <div className="text-center py-8 text-slate-500">
-          <div className="text-4xl mb-2">📭</div>
+          <img
+            src="/icons/dashboard-monitor.svg"
+            alt=""
+            className="w-8 h-8 mx-auto"
+            style={{ filter: "invert(26%) sepia(85%) saturate(2032%) hue-rotate(188deg) brightness(91%) contrast(101%)" }} />
           <div className="text-sm">Belum ada aktivitas</div>
         </div>
       )}

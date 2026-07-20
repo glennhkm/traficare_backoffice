@@ -191,8 +191,12 @@ export default function StudentsListClient({ students, counts }: StudentsListCli
                   style={{ filter: "invert(26%) sepia(85%) saturate(2032%) hue-rotate(188deg) brightness(91%) contrast(101%)" }}
                 />
               </div>
-              <h4 className="text-base font-semibold text-slate-700 mb-1">Siswa tidak ditemukan</h4>
-              <p className="text-sm text-slate-400 max-w-sm mx-auto">Tidak ada data siswa yang cocok dengan pencarian "{searchTerm}"</p>
+              <h4 className="text-base font-semibold text-slate-700 mb-1">
+                {debouncedSearch ? "Siswa tidak ditemukan" : "Siswa belum ditemukan"}
+              </h4>
+              <p className="text-sm text-slate-400 max-w-sm mx-auto">
+                {debouncedSearch ? "Tidak ada data siswa yang cocok dengan pencarian" : "Belum ada data siswa"}
+              </p>
             </div>
           )}
         </div>
