@@ -34,7 +34,7 @@ export async function createGuideAction(formData: FormData) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ force: true }),
+          body: JSON.stringify({ force: false }),
         });
       }
     } catch (e) {
@@ -69,7 +69,7 @@ export async function updateGuideAction(formData: FormData) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ force: true }),
+          body: JSON.stringify({ force: false }),
         });
       }
     } catch (e) {
