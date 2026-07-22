@@ -3,7 +3,7 @@
 import { useMemo, useState, FormEvent, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import {Eye, Edit2, Trash2, Plus} from "lucide-react";
+import { Eye, Edit2, Trash2, Plus } from "lucide-react";
 
 type Guide = {
   id: string;
@@ -111,11 +111,10 @@ export default function GuidesListClient({
           disabled={isCreateDisabled}
           onClick={() => setOpenCreate(true)}
           className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 shrink-0 ${isCreateDisabled
-              ? "bg-slate-200/70 border border-slate-300 text-slate-400 cursor-not-allowed"
-              : "bg-[#0066A5] text-white hover:bg-[#0066A5]/95 shadow-md shadow-blue-600/10 hover:shadow-lg hover:shadow-blue-600/15"
+            ? "bg-slate-200/70 border border-slate-300 text-slate-400 cursor-not-allowed"
+            : "bg-[#0066A5] text-white hover:bg-[#0066A5]/95 shadow-md shadow-blue-600/10 hover:shadow-lg hover:shadow-blue-600/15"
             }`}
         >
-          {/* <span>➕</span> */}
           <Plus className="h-4 w-4" />
           <span>Tambah Panduan</span>
         </button>
@@ -123,7 +122,11 @@ export default function GuidesListClient({
 
       {guides.length === 0 ? (
         <div className="p-16 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300/80">
-          <div className="text-6xl mb-4">📚</div>
+          <img
+            src="/icons/info-guide.svg"
+            alt=""
+            className="w-8 h-8"
+            style={{ filter: "invert(26%) sepia(85%) saturate(2032%) hue-rotate(188deg) brightness(91%) contrast(101%)" }} />
           <h4 className="text-lg font-medium text-slate-700 mb-1">Belum Ada Panduan</h4>
           <p className="text-sm text-slate-500 max-w-md mx-auto">Mulai dengan menambahkan panduan pertama Anda untuk membekali edukasi siswa.</p>
         </div>
@@ -165,7 +168,7 @@ export default function GuidesListClient({
                     onClick={() => setPreviewGuide(g)}
                     className="flex-1 py-2.5 px-3 bg-orange-400 hover:bg-orange-500 text-white rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-1.5"
                   >
-                    <Eye className="h-4 w-4" /> 
+                    <Eye className="h-4 w-4" />
                     Pratinjau
                   </button>
                   <button
@@ -281,8 +284,8 @@ function PreviewModal({ guide, onClose }: { guide: Guide; onClose: () => void })
             <button
               onClick={() => setActiveTab("video")}
               className={`flex-1 py-3.5 text-center text-sm font-medium transition-all border-b-2 flex items-center justify-center gap-2 ${activeTab === "video"
-                  ? "border-[#0066A5] text-[#0066A5]"
-                  : "border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50"
+                ? "border-[#0066A5] text-[#0066A5]"
+                : "border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50"
                 }`}
             >
               Video Panduan ({videos.length})
@@ -290,8 +293,8 @@ function PreviewModal({ guide, onClose }: { guide: Guide; onClose: () => void })
             <button
               onClick={() => setActiveTab("pdf")}
               className={`flex-1 py-3.5 text-center text-sm font-medium transition-all border-b-2 flex items-center justify-center gap-2 ${activeTab === "pdf"
-                  ? "border-[#0066A5] text-[#0066A5]"
-                  : "border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50"
+                ? "border-[#0066A5] text-[#0066A5]"
+                : "border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50"
                 }`}
             >
               Dokumen PDF ({pdfs.length})
@@ -317,8 +320,8 @@ function PreviewModal({ guide, onClose }: { guide: Guide; onClose: () => void })
                             key={idx}
                             onClick={() => setActiveVideoIndex(idx)}
                             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all border ${activeVideoIndex === idx
-                                ? "bg-[#0066A5] text-white border-transparent"
-                                : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+                              ? "bg-[#0066A5] text-white border-transparent"
+                              : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
                               }`}
                           >
                             Video {idx + 1}
@@ -371,8 +374,8 @@ function PreviewModal({ guide, onClose }: { guide: Guide; onClose: () => void })
                             key={idx}
                             onClick={() => setActivePdfIndex(idx)}
                             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all border ${activePdfIndex === idx
-                                ? "bg-[#0066A5] text-white border-transparent"
-                                : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+                              ? "bg-[#0066A5] text-white border-transparent"
+                              : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
                               }`}
                           >
                             Dokumen {idx + 1}
