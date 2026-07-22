@@ -1,7 +1,198 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
+import React from "react";
 import { Search, X, MessageSquare, ChevronLeft, ChevronRight, User, Bot, Calendar, Hash } from "lucide-react";
+
+/**
+ * Lightweight markdown-to-JSX renderer for AI chat messages.
+ * Handles: **bold**, *italic*, `code`, ```code blocks```, [links](url),
+ * headers (##), numbered/bullet lists, and horizontal rules.
+ */
+function renderMarkdown(text: string): React.ReactNode {
+  // Split into code blocks vs normal text
+  const codeBlockRegex = /```(\w*)\n?([\s\S]*?)```/g;
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = codeBlockRegex.exec(text)) !== null) {
+    // Text before this code block
+    if (match.index > lastIndex) {
+      parts.push(...renderMarkdownLines(text.slice(lastIndex, match.index), parts.length));
+    }
+    // The code block itself
+    parts.push(
+      <pre
+        key={`code-${match.index}`}
+        className="bg-slate-800 text-slate-100 rounded-lg px-4 py-3 my-2 text-xs overflow-x-auto font-mono leading-relaxed"
+      >
+        <code>{match[2].trim()}</code>
+      </pre>
+    );
+    lastIndex = match.index + match[0].length;
+  }
+
+  // Remaining text after last code block
+  if (lastIndex < text.length) {
+    parts.push(...renderMarkdownLines(text.slice(lastIndex), parts.length));
+  }
+
+  return <>{parts}</>;
+}
+
+function renderMarkdownLines(text: string, keyOffset: number): React.ReactNode[] {
+  const lines = text.split("\n");
+  const elements: React.ReactNode[] = [];
+  let listItems: React.ReactNode[] = [];
+  let listType: "ul" | "ol" | null = null;
+
+  function flushList() {
+    if (listItems.length > 0 && listType) {
+      const ListTag = listType;
+      elements.push(
+        <ListTag
+          key={`list-${keyOffset}-${elements.length}`}
+          className={`my-1.5 space-y-0.5 ${listType === "ul" ? "list-disc" : "list-decimal"} pl-5`}
+        >
+          {listItems}
+        </ListTag>
+      );
+      listItems = [];
+      listType = null;
+    }
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    // Empty line
+    if (trimmed === "") {
+      flushList();
+      // Only add break if not at start/end
+      if (i > 0 && i < lines.length - 1) {
+        elements.push(<br key={`br-${keyOffset}-${i}`} />);
+      }
+      continue;
+    }
+
+    // Horizontal rule
+    if (/^[-*_]{3,}$/.test(trimmed)) {
+      flushList();
+      elements.push(<hr key={`hr-${keyOffset}-${i}`} className="my-2 border-slate-300" />);
+      continue;
+    }
+
+    // Headers
+    const headerMatch = trimmed.match(/^(#{1,4})\s+(.+)/);
+    if (headerMatch) {
+      flushList();
+      const level = headerMatch[1].length;
+      const sizes = ["text-base font-bold", "text-sm font-bold", "text-sm font-semibold", "text-sm font-medium"];
+      elements.push(
+        <div key={`h-${keyOffset}-${i}`} className={`${sizes[level - 1] || sizes[3]} mt-2 mb-1 text-slate-900`}>
+          {renderInline(headerMatch[2])}
+        </div>
+      );
+      continue;
+    }
+
+    // Bullet list items: - item, * item, • item
+    const bulletMatch = trimmed.match(/^[-*•]\s+(.+)/);
+    if (bulletMatch) {
+      if (listType !== "ul") {
+        flushList();
+        listType = "ul";
+      }
+      listItems.push(
+        <li key={`li-${keyOffset}-${i}`} className="text-sm leading-relaxed">
+          {renderInline(bulletMatch[1])}
+        </li>
+      );
+      continue;
+    }
+
+    // Numbered list items: 1. item, 1) item
+    const numMatch = trimmed.match(/^\d+[.)]\s+(.+)/);
+    if (numMatch) {
+      if (listType !== "ol") {
+        flushList();
+        listType = "ol";
+      }
+      listItems.push(
+        <li key={`li-${keyOffset}-${i}`} className="text-sm leading-relaxed">
+          {renderInline(numMatch[1])}
+        </li>
+      );
+      continue;
+    }
+
+    // Normal paragraph line
+    flushList();
+    elements.push(
+      <span key={`p-${keyOffset}-${i}`}>
+        {i > 0 && elements.length > 0 && <br />}
+        {renderInline(trimmed)}
+      </span>
+    );
+  }
+
+  flushList();
+  return elements;
+}
+
+/** Render inline markdown: **bold**, *italic*, `code`, [link](url) */
+function renderInline(text: string): React.ReactNode {
+  // Process inline patterns using a regex that matches them in order
+  const inlineRegex = /(\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*|`(.+?)`|\[(.+?)\]\((.+?)\))/g;
+  const parts: React.ReactNode[] = [];
+  let lastIdx = 0;
+  let m: RegExpExecArray | null;
+
+  while ((m = inlineRegex.exec(text)) !== null) {
+    // Text before match
+    if (m.index > lastIdx) {
+      parts.push(text.slice(lastIdx, m.index));
+    }
+
+    if (m[2]) {
+      // ***bold italic***
+      parts.push(
+        <strong key={m.index} className="font-bold italic">{m[2]}</strong>
+      );
+    } else if (m[3]) {
+      // **bold**
+      parts.push(
+        <strong key={m.index} className="font-semibold">{m[3]}</strong>
+      );
+    } else if (m[4]) {
+      // *italic*
+      parts.push(
+        <em key={m.index}>{m[4]}</em>
+      );
+    } else if (m[5]) {
+      // `code`
+      parts.push(
+        <code key={m.index} className="bg-slate-200 text-slate-800 px-1.5 py-0.5 rounded text-xs font-mono">{m[5]}</code>
+      );
+    } else if (m[6] && m[7]) {
+      // [link](url)
+      parts.push(
+        <a key={m.index} href={m[7]} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline hover:text-blue-800">{m[6]}</a>
+      );
+    }
+
+    lastIdx = m.index + m[0].length;
+  }
+
+  // Remaining text
+  if (lastIdx < text.length) {
+    parts.push(text.slice(lastIdx));
+  }
+
+  return parts.length === 1 ? parts[0] : <>{parts}</>;
+}
 
 type ChatRoom = {
   id: string;
@@ -193,13 +384,13 @@ function ChatDetailModal({
                   )}
                   <div className={`max-w-[78%] ${isUser ? "items-end" : "items-start"} flex flex-col gap-1`}>
                     <div
-                      className={`px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+                      className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${
                         isUser
-                          ? "bg-[#0066A5] text-white rounded-br-sm"
+                          ? "bg-[#0066A5] text-white rounded-br-sm whitespace-pre-wrap"
                           : "bg-slate-100 text-slate-800 rounded-bl-sm"
                       }`}
                     >
-                      {msg.message}
+                      {isUser ? msg.message : renderMarkdown(msg.message)}
                     </div>
                     <span className="text-[10px] text-slate-400 px-1">
                       {formatTime(msg.created_at)}
