@@ -71,128 +71,122 @@ export default function ChangePasswordModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-xl">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-slate-800">
-            Ubah Password
-          </h2>
-          <button
-            onClick={handleClose}
-            className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
-          >
-            <svg
-              className="w-5 h-5 text-slate-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+    <div className="fixed inset-0 z-50">
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-slate-900/65 backdrop-blur-sm" onClick={handleClose} />
+      <div className="absolute inset-0 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-slate-200 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+          {/* Header */}
+          <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50 shrink-0">
+            <h3 className="font-semibold text-slate-800 text-lg">
+              Ubah Password
+            </h3>
+            <button 
+              onClick={handleClose} 
+              className="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center text-slate-700 font-semibold transition-all"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
+              ✕
+            </button>
+          </div>
+
+          {/* Form Content */}
+          <div className="p-6 overflow-y-auto">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Current Password */}
+              <div className="space-y-1.5">
+                <label
+                  htmlFor="currentPassword"
+                  className="block text-sm font-semibold text-slate-700"
+                >
+                  Password Lama
+                </label>
+                <input
+                  id="currentPassword"
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="w-full border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm bg-white"
+                  placeholder="Masukkan password lama"
+                  required
+                />
+              </div>
+
+              {/* New Password */}
+              <div className="space-y-1.5">
+                <label
+                  htmlFor="newPassword"
+                  className="block text-sm font-semibold text-slate-700"
+                >
+                  Password Baru
+                </label>
+                <input
+                  id="newPassword"
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm bg-white"
+                  placeholder="Masukkan password baru"
+                  required
+                  minLength={6}
+                />
+              </div>
+
+              {/* Confirm Password */}
+              <div className="space-y-1.5">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-semibold text-slate-700"
+                >
+                  Konfirmasi Password Baru
+                </label>
+                <input
+                  id="confirmPassword"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm bg-white"
+                  placeholder="Konfirmasi password baru"
+                  required
+                  minLength={6}
+                />
+              </div>
+
+              {/* Password Requirements */}
+              <div className="text-[11px] text-slate-500 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                <p className="font-semibold text-slate-700 mb-1">Persyaratan password:</p>
+                <ul className="space-y-1 font-medium">
+                  <li>• Minimal 6 karakter</li>
+                  <li>• Berbeda dengan password lama</li>
+                  <li>• Kombinasi huruf dan angka disarankan</li>
+                </ul>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-4 border-t border-slate-100 flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  className="flex-1 px-5 py-2.5 rounded-xl border font-semibold text-sm hover:bg-slate-50 transition-all text-slate-700 bg-white"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="flex-1 px-5 py-2.5 rounded-xl bg-[#0066A5] text-white hover:bg-[#0066A5]/95 font-semibold text-sm transition-all shadow-md shadow-blue-600/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? (
+                    <div className="flex justify-center w-full">
+                      <LoaderIcon />
+                    </div>
+                  ) : (
+                    "Ubah Password"
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Current Password */}
-          <div>
-            <label
-              htmlFor="currentPassword"
-              className="block text-sm font-medium text-slate-700 mb-2"
-            >
-              Password Lama
-            </label>
-            <input
-              id="currentPassword"
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Masukkan password lama"
-              required
-            />
-          </div>
-
-          {/* New Password */}
-          <div>
-            <label
-              htmlFor="newPassword"
-              className="block text-sm font-medium text-slate-700 mb-2"
-            >
-              Password Baru
-            </label>
-            <input
-              id="newPassword"
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Masukkan password baru"
-              required
-              minLength={6}
-            />
-          </div>
-
-          {/* Confirm Password */}
-          <div>
-            <label
-              htmlFor="confirmPassword"
-              className="block text-sm font-medium text-slate-700 mb-2"
-            >
-              Konfirmasi Password Baru
-            </label>
-            <input
-              id="confirmPassword"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Konfirmasi password baru"
-              required
-              minLength={6}
-            />
-          </div>
-
-          {/* Password Requirements */}
-          <div className="text-xs text-slate-500 bg-slate-50 p-3 rounded-lg">
-            <p className="font-medium mb-1">Persyaratan password:</p>
-            <ul className="space-y-1">
-              <li>• Minimal 6 karakter</li>
-              <li>• Berbeda dengan password lama</li>
-              <li>• Kombinasi huruf dan angka disarankan</li>
-            </ul>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex space-x-3 pt-4">
-            <button
-              type="button"
-              onClick={handleClose}
-              className="flex-1 px-4 py-2 text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg transition-colors"
-            >
-              {isLoading ? (
-                <div className="flex justify-center w-full">
-                  <LoaderIcon />
-                </div>
-              ) : (
-                "Ubah Password"
-              )}
-            </button>
-          </div>
-        </form>
       </div>
     </div>
   );

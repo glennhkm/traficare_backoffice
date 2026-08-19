@@ -1,15 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Primary palette updated to Blue */
+  --primary: #0066A5; /* primary blue */
+  --primary-foreground: #ffffff;
+  --secondary: #0d9488; /* teal-600 as elegant support */
+  --secondary-foreground: #ffffff;
+  --muted: #f9fafb; /* gray-50 */
+  --muted-foreground: #6b7280; /* gray-500 */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: "Poppins", sans-serif;
 }
 
 /* Styles for rich text content from CKEditor */
@@ -127,9 +135,84 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
 }
 
 button {
   cursor: pointer;
+}
+
+/* Custom Premium UI Additions */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+}
+
+@keyframes float-reverse {
+  0%, 100% {
+    transform: translate(0, 0) scale(1.1);
+  }
+  33% {
+    transform: translate(-30px, 40px) scale(0.95);
+  }
+  66% {
+    transform: translate(40px, -20px) scale(1.05);
+  }
+}
+
+.animate-blob-1 {
+  animation: float-slow 20s infinite ease-in-out;
+}
+
+.animate-blob-2 {
+  animation: float-reverse 25s infinite ease-in-out;
+}
+
+.gradient-text-primary {
+  background: linear-gradient(135deg, #0066A5, #1f2937); /* blue to slate */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-logo {
+  background: linear-gradient(to bottom, #3b82f6 0%, #0066A5 55%, #002244 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.scale-in {
+  animation: scaleIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.float-animation {
+  animation: float 4s ease-in-out infinite;
 }
